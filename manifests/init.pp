@@ -148,11 +148,12 @@ class tempest(
 
   # [orchestration]
   #
+  $orch_catalog_type                        = 'orchestration',
   $orch_region                              = undef,
   $orch_build_interval                      = '1',
-  $build_timeout                            = '300',
-  $instance_type                            = 'm1.micro',
-  $image_ref                                = 'ubuntu-vm-heat-cfntools',
+  $orch_build_timeout                       = '300',
+  $orch_instance_type                       = 'm1.micro',
+  $orch_image_ref                           = 'ubuntu-vm-heat-cfntools',
   $orch_keypair_name                        = undef,
 
   #[dashboard]
@@ -301,9 +302,9 @@ class tempest(
     'compute/disk_config_enabled':                      value => $disk_config_enabled ;
     'compute/flavor_extra_enabled':                     value => $flavor_extra_enabled;
     'compute/volume_device_name':                       value => $volume_device_name;
-    'compute_admin/username':                           value => $compute_a_username;
-    'compute_admin/password':                           value => $compute_a_password;
-    'compute_admin/tenant_name':                        value => $compute_a_tenant ;
+    'compute-admin/username':                           value => $compute_a_username;
+    'compute-admin/password':                           value => $compute_a_password;
+    'compute-admin/tenant_name':                        value => $compute_a_tenant ;
     'image/catalog_type':                               value => $image_catalog_type;
     'image/region':                                     value => $image_region;
     'image/api_version':                                value => $image_api_version;
@@ -316,6 +317,54 @@ class tempest(
     'network/tenant_networks_reachable':                value => $tenant_networks_reachable;
     'network/public_network_id':                        value => $public_network_id;
     'network/public_router_id':                         value => $public_router_id;
+    'volume/catalog_type':                              value => $volume_catalog_type;
+    'volume/region':                                    value => $volume_region;
+    'volume/disk_format':                               value => $disk_format;
+    'volume/build_interval':                            value => $volume_build_interval;
+    'volume/build_timeout':                             value => $volume_build_timeout;
+    'volume/multi_backend_enabled':                     value => $multi_backend_enabled;
+    'volume/backend1_name':                             value => $backend1_name;
+    'volume/backend2_name':                             value => $backend2_name;
+    'volume/storage_protocol':                          value => $storage_protocol;
+    'volume/vendor_name':                               value => $vendor_name;
+    'object-storage/catalog_type':                      value => $object_s_catalog_type;
+    'object-storage/region':                            value => $object_s_region;
+    'object-storage/container_sync_timeout':            value => $container_sync_timeout;
+    'object-storage/container_sync_interval':           value => $container_sync_interval;
+    'object-storage/accounts_quotas_available':         value => $accounts_quotas_available;
+    'object-storage/container_quotas_available':        value => $container_quotas_available;
+    'object-storage/operator_role':                     value => $operator_role;
+    'boto/ec2_url':                                     value => $ec2_url;
+    'boto/s3_url':                                      value => $s3_url;
+    'boto/aws_access':                                  value => $aws_access;
+    'boto/aws_secret':                                  value => $aws_secret;
+    'boto/s3_materials_path':                           value => $s3_materials_path;
+    'boto/ari_manifest':                                value => $ari_manifest;
+    'boto/ami_manifest':                                value => $ami_manifest;
+    'boto/aki_manifest':                                value => $aki_manifest;
+    'boto/instance_type':                               value => $instance_type;
+    'boto/http_socket_timeout':                         value => $http_socket_timeout;
+    'boto/num_retries':                                 value => $boto_num_retries;
+    'boto/build_timeout':                               value => $boto_build_timeout;
+    'boto/build_interval':                              value => $boto_build_interval;
+    'orchestration/catalog_type':                       value => $orch_catalog_type;
+    'orchestration/region':                             value => $orch_region;
+    'orchestration/build_interval':                     value => $orch_build_interval;
+    'orchestration/build_timeout':                      value => $orch_build_timeout;
+    'orchestration/instance_type':                      value => $orch_instance_type;
+    'orchestration/image_ref':                          value => $orch_image_ref;
+    'orchestration/keypair_name':                       value => $orch_keypair_name;
+    'dashboard/dashboard_url':                          value => $dashboard_url;
+    'dashboard/login_url':                              value => $dash_login_url;
+    'scenario/img_dir':                                 value => $scn_img_dir;
+    'scenario/ami_img_file':                            value => $scn_ami_img_file;
+    'scenario/ari_img_file':                            value => $scn_ari_img_file;
+    'scenario/aki_img_file':                            value => $scn_aki_img_file;
+    'scenario/ssh_user':                                value => $scn_ssh_user;
+    'scenario/large_ops_number':                        value => $scn_large_ops_number;
+    'cli/enabled':                                      value => $cli_enabled;
+    'cli/cli_dir':                                      value => $cli_dir;
+    'cli/timeout':                                      value => $cli_timeout;
     'service_available/cinder':                         value => $cinder_available;
     'service_available/glance':                         value => $glance_available;
     'service_available/heat':                           value => $heat_available;
@@ -326,7 +375,7 @@ class tempest(
     'stress/max_instances':                             value => $stress_max_instances;
     'stress/log_check_interval':                        value => $log_check_interval ;
     'stress/default_thread_number_per_action':          value => $default_thread_number_per_action ;
-    'debug/enable':                                     value  => $debug_enable;
+    'debug/enable':                                     value => $debug_enable;
   }
 
   if $configure_images {
