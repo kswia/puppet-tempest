@@ -243,6 +243,26 @@ class tempest(
 
   $tempest_conf = "${tempest_clone_path}/etc/tempest.conf"
 
+  # get glance image id
+
+  if $configure_images {
+    if ! $image_ref and $image_name {
+      # If the image id was not provided, look it up via the image name
+      # and set the value in the conf file.
+      $image_ref = tempest_glance_image_id($image_name, $identity_uri, $admin_tenant , $admin_username, $admin_username)
+    }
+    else {
+      fail('A value for either image_name or image_ref must be provided.')
+    }
+    if ! $image_ref_alt and $image_name_alt {
+      $image_ref_alt = tempest_glance_image_id($image_name_alt, $identity_uri, $admin_tenant , $admin_username, $admin_username)
+    }
+    else {
+        fail('A value for either image_name_alt or image_ref_alt must \
+be provided.')
+    }
+  }
+
   file { $tempest_conf:
     replace => false,
     source  => "${tempest_conf}.sample",
@@ -376,34 +396,6 @@ class tempest(
     'stress/log_check_interval':                        value => $log_check_interval ;
     'stress/default_thread_number_per_action':          value => $default_thread_number_per_action ;
     'debug/enable':                                     value => $debug_enable;
-  }
-
-  if $configure_images {
-    if ! $image_ref and $image_name {
-      # If the image id was not provided, look it up via the image name
-      # and set the value in the conf file.
-      tempest_glance_id_setter { 'image_ref':
-        ensure            => present,
-        tempest_conf_path => $tempest_conf,
-        image_name        => $image_name,
-        require           => File[$tempest_conf],
-      }
-    }
-    else {
-      fail('A value for either image_name or image_ref must be provided.')
-    }
-    if ! $image_ref_alt and $image_name_alt {
-      tempest_glance_id_setter { 'image_ref_alt':
-        ensure            => present,
-        tempest_conf_path => $tempest_conf,
-        image_name        => $image_name_alt,
-        require           => File[$tempest_conf],
-      }
-    }
-    else {
-        fail('A value for either image_name_alt or image_ref_alt must \
-be provided.')
-    }
   }
 
   if $neutron_available and $configure_networks {
