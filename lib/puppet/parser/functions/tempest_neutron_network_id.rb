@@ -72,7 +72,7 @@ auth_password
         if (neutron_response.code =~ /^20./)
           neutron_response_json = JSON.parse(neutron_response.body)
           neutron_response_json['networks'].each do |network|
-            if network_name == image['name']
+            if network_name == network['name']
               network_id = network['id']
             end
           end
