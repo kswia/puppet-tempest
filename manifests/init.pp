@@ -249,17 +249,23 @@ class tempest(
     if ! $image_ref and $image_name {
       # If the image id was not provided, look it up via the image name
       # and set the value in the conf file.
-      $image_ref = tempest_glance_image_id($image_name, $identity_uri, $admin_tenant , $admin_username, $admin_username)
+      $n_image_ref = tempest_glance_image_id($image_name, $identity_uri, $admin_tenant_name, $admin_username, $admin_password)
     }
     else {
       fail('A value for either image_name or image_ref must be provided.')
     }
     if ! $image_ref_alt and $image_name_alt {
-      $image_ref_alt = tempest_glance_image_id($image_name_alt, $identity_uri, $admin_tenant , $admin_username, $admin_username)
+      $n_image_ref_alt = tempest_glance_image_id($image_name_alt, $identity_uri, $admin_tenant_name, $admin_username, $admin_password)
     }
     else {
         fail('A value for either image_name_alt or image_ref_alt must \
 be provided.')
+    }
+    if $image_ref {
+      $n_image_ref = image_ref
+    }
+    if $image_ref_alt {
+      $n_image_ref_alt = image_ref_alt
     }
   }
 
@@ -293,8 +299,8 @@ be provided.')
     'identity/admin_role':                              value => $admin_role;
     'compute/allow_tenant_isolation':                   value => $allow_tenant_isolation;
     'compute/allow_tenant_reuse':                       value => $allow_tenant_reuse;
-    'compute/image_ref':                                value => $image_ref;
-    'compute/image_ref_alt':                            value => $image_ref_alt;
+    'compute/image_ref':                                value => $n_image_ref;
+    'compute/image_ref_alt':                            value => $n_image_ref_alt;
     'compute/flavor_ref':                               value => $flavor_ref;
     'compute/flavor_ref_alt':                           value => $flavor_ref_alt;
     'compute/image_ssh_user':                           value => $image_ssh_user;
