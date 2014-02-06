@@ -267,6 +267,20 @@ be provided.')
     if $image_ref_alt {
       $n_image_ref_alt = image_ref_alt
     }
+
+  }
+
+  if $neutron_available and $configure_networks {
+    if ! $public_network_id and $public_network_name {
+      $n_public_network_id = tempest_neutron_net_id_setter($public_network_name, $identity_uri, $admin_tenant_name, $admin_username, $admin_password)
+    }
+    else {
+        fail('A value for either public_network_id or public_network_name \
+must be provided.')
+    }
+    if $public_network_id {
+      $n_public_network_id = public_network_id
+    }
   }
 
   file { $tempest_conf:
@@ -341,7 +355,7 @@ be provided.')
     'network/tenant_network_cidr':                      value => $tenant_network_cidr;
     'network/tenant_network_mask_bits':                 value => $tenant_network_mask_bits;
     'network/tenant_networks_reachable':                value => $tenant_networks_reachable;
-    'network/public_network_id':                        value => $public_network_id;
+    'network/public_network_id':                        value => $n_public_network_id;
     'network/public_router_id':                         value => $public_router_id;
     'volume/catalog_type':                              value => $volume_catalog_type;
     'volume/region':                                    value => $volume_region;
@@ -403,20 +417,4 @@ be provided.')
     'stress/default_thread_number_per_action':          value => $default_thread_number_per_action ;
     'debug/enable':                                     value => $debug_enable;
   }
-
-  if $neutron_available and $configure_networks {
-    if ! $public_network_id and $public_network_name {
-      tempest_neutron_net_id_setter { 'public_network_id':
-        ensure            => present,
-        tempest_conf_path => $tempest_conf,
-        network_name      => $public_network_name,
-        require           => File[$tempest_conf],
-      }
-    }
-    else {
-        fail('A value for either public_network_id or public_network_name \
-must be provided.')
-    }
-  }
-
 }
