@@ -43,17 +43,16 @@ auth_password
       }
     })
 
+    keystone_uri = URI.parse(auth_keystone_uri)
+    keystone_path = keystone_uri.path.chomp('/') + '/tokens'
+    keystone_connection = Net::HTTP.new(keystone_uri.host, keystone_uri.port)
+    if keystone_uri.scheme =='https'
+      keystone_connection.use_ssl = true
+      keystone_connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
     begin
       keystone_connection.open_timeout = 2
       keystone_connection.read_timeout = 2
-      keystone_uri = URI.parse(auth_keystone_uri)
-      keystone_path = keystone_uri.path.chomp('/') + '/tokens'
-      keystone_connection = Net::HTTP.new(keystone_uri.host, keystone_uri.port)
-      if keystone_uri.scheme =='https'
-        keystone_connection.use_ssl = true
-        keystone_connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      end
-
       keystone_response = keystone_connection.post(keystone_path, keystone_auth_data, {'Content-Type' => 'application/json'});
       if (keystone_response.code =~ /^20./)
         keystone_response_json = JSON.parse(keystone_response.body)
