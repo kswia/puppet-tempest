@@ -318,6 +318,7 @@ must be provided.')
     'compute/flavor_ref':                               value => $flavor_ref;
     'compute/flavor_ref_alt':                           value => $flavor_ref_alt;
     'compute/image_ssh_user':                           value => $image_ssh_user;
+    'compute/image_ssh_password':                           value => $image_ssh_password;
     'compute/image_alt_ssh_user':                       value => $image_alt_ssh_user;
     'compute/build_interval':                           value => $compute_build_interval;
     'compute/build_timeout':                            value => $compute_build_timeout;
