@@ -104,8 +104,6 @@ class tempest(
   $tenant_network_mask_bits                 = '24',
   $tenant_networks_reachable                = false,
   $public_network_id                        = undef,
-  # Upstream has a bad default - set it to empty string.
-  $public_router_id                         = '',
 
   # [volume]
   #
